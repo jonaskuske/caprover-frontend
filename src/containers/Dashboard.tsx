@@ -234,7 +234,7 @@ export default class Dashboard extends ApiComponent<
 
         this.apiManager
             .updateRootDomain(rootDomain, force)
-            .then(function (data: any) {
+            .then(function (_data: any) {
                 Modal.success({
                     title: 'Root Domain Updated',
                     content: (

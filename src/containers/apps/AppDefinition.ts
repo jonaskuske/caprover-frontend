@@ -1,3 +1,4 @@
+/* eslint-disable */
 // COPIED FROM BACKEND CODE
 interface IHashMapGeneric<T> {
     [id: string]: T

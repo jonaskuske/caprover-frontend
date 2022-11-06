@@ -1,8 +1,8 @@
 const fallbackNoOps = {
-    getItem(t: string) {
+    getItem(k: string) {
         return ''
     },
-    setItem(t: string, v: string) {},
+    setItem(k: string, v: string) {},
 }
 const localStorage = window.localStorage ? window.localStorage : fallbackNoOps
 const sessionStorage = window.sessionStorage
