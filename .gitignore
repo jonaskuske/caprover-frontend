@@ -25,3 +25,11 @@ yarn-error.log*
 
 public/dark-theme.css
 public/light-theme.css
+
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions
