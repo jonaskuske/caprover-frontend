@@ -22,9 +22,16 @@ type AppState = {
     isDarkMode: boolean
 }
 
+const darkTheme = import.meta.env.DEV
+    ? new URL(`./styles/dark-theme.less`, import.meta.url).href
+    : `${import.meta.env.BASE_URL}themes/dark-theme.css`
+const lightTheme = import.meta.env.DEV
+    ? new URL(`./styles/light-theme.less`, import.meta.url).href
+    : `${import.meta.env.BASE_URL}themes/light-theme.css`
+
 const themes = {
-    dark: new URL(`/dark-theme.css`, import.meta.url).href,
-    light: new URL(`/light-theme.css`, import.meta.url).href,
+    dark: darkTheme,
+    light: lightTheme,
 }
 
 const MainComponent = () => {
