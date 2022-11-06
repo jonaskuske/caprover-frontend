@@ -1,9 +1,8 @@
-import * as yaml from 'yaml'
 import { IDockerComposeService } from '../models/IOneClickAppModels'
 import Utils from './Utils'
 
 export default class DockerComposeToServiceOverride {
-    static convertComposeToService(compose: IDockerComposeService) {
+    static async convertComposeToService(compose: IDockerComposeService) {
         // NOTE:
         // Port, replicas, env vars, volumes, and image are supplied through CapRover definition
         // network will be set to captain-overlay
@@ -23,7 +22,8 @@ export default class DockerComposeToServiceOverride {
             return undefined
         }
 
-        return yaml.stringify(mergedOverride)
+        const { stringify } = await import('yaml')
+        return stringify(mergedOverride)
     }
 
     private static parseHostname(compose: IDockerComposeService) {

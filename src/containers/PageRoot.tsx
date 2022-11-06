@@ -19,19 +19,24 @@ import ApiManager from '../api/ApiManager'
 import { IVersionInfo } from '../models/IVersionInfo'
 import * as GlobalActions from '../redux/actions/GlobalActions'
 import StorageHelper from '../utils/StorageHelper'
-import AppDetails from './apps/appDetails/AppDetails'
-import Apps from './apps/Apps'
-import OneClickAppSelector from './apps/oneclick/selector/OneClickAppSelector'
-import OneClickAppConfigPage from './apps/oneclick/variables/OneClickAppConfigPage'
-import Dashboard from './Dashboard'
 import ApiComponent from './global/ApiComponent'
 import ClickableLink from './global/ClickableLink'
 import DarkModeSwitch from './global/DarkModeSwitch'
 import NewTabLink from './global/NewTabLink'
-import LoggedInCatchAll from './LoggedInCatchAll'
-import Monitoring from './monitoring/Monitoring'
-import Cluster from './nodes/Cluster'
-import Settings from './settings/Settings'
+
+const Dashboard = React.lazy(() => import('./Dashboard'))
+const AppDetails = React.lazy(() => import('./apps/appDetails/AppDetails'))
+const Apps = React.lazy(() => import('./apps/Apps'))
+const Monitoring = React.lazy(() => import('./monitoring/Monitoring'))
+const Cluster = React.lazy(() => import('./nodes/Cluster'))
+const Settings = React.lazy(() => import('./settings/Settings'))
+const LoggedInCatchAll = React.lazy(() => import('./LoggedInCatchAll'))
+const OneClickAppConfigPage = React.lazy(
+    () => import('./apps/oneclick/variables/OneClickAppConfigPage')
+)
+const OneClickAppSelector = React.lazy(
+    () => import('./apps/oneclick/selector/OneClickAppSelector')
+)
 
 const { Header, Content, Sider } = Layout
 
@@ -375,37 +380,50 @@ class PageRoot extends ApiComponent<
                             }}
                             id="main-content-layout"
                         >
-                            <Switch>
-                                <Route
-                                    path="/dashboard/"
-                                    component={Dashboard}
-                                />
-                                <Route
-                                    path="/apps/details/:appName"
-                                    render={(props) => (
-                                        <AppDetails
-                                            {...props}
-                                            mainContainer={self.mainContainer}
-                                        />
-                                    )}
-                                />
-                                <Route
-                                    path="/apps/oneclick/:appName"
-                                    component={OneClickAppConfigPage}
-                                />
-                                <Route
-                                    path="/apps/oneclick"
-                                    component={OneClickAppSelector}
-                                />
-                                <Route path="/apps/" component={Apps} />
-                                <Route
-                                    path="/monitoring/"
-                                    component={Monitoring}
-                                />
-                                <Route path="/cluster/" component={Cluster} />
-                                <Route path="/settings/" component={Settings} />
-                                <Route path="/" component={LoggedInCatchAll} />
-                            </Switch>
+                            <React.Suspense fallback="">
+                                <Switch>
+                                    <Route
+                                        path="/dashboard/"
+                                        component={Dashboard}
+                                    />
+                                    <Route
+                                        path="/apps/details/:appName"
+                                        render={(props) => (
+                                            <AppDetails
+                                                {...props}
+                                                mainContainer={
+                                                    self.mainContainer
+                                                }
+                                            />
+                                        )}
+                                    />
+                                    <Route
+                                        path="/apps/oneclick/:appName"
+                                        component={OneClickAppConfigPage}
+                                    />
+                                    <Route
+                                        path="/apps/oneclick"
+                                        component={OneClickAppSelector}
+                                    />
+                                    <Route path="/apps/" component={Apps} />
+                                    <Route
+                                        path="/monitoring/"
+                                        component={Monitoring}
+                                    />
+                                    <Route
+                                        path="/cluster/"
+                                        component={Cluster}
+                                    />
+                                    <Route
+                                        path="/settings/"
+                                        component={Settings}
+                                    />
+                                    <Route
+                                        path="/"
+                                        component={LoggedInCatchAll}
+                                    />
+                                </Switch>
+                            </React.Suspense>
                         </div>
                     </Content>
                 </Layout>

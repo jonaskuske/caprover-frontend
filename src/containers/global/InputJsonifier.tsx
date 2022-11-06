@@ -1,8 +1,7 @@
 import { Input } from 'antd'
 import React, { Component, Fragment } from 'react'
-import yaml from 'yaml'
 
-function ensureStringifiedJson(raw: string) {
+async function ensureStringifiedJson(raw: string) {
     raw = (raw || '').trim()
     if (!raw.length) {
         return ''
@@ -13,7 +12,8 @@ function ensureStringifiedJson(raw: string) {
     }
 
     try {
-        return JSON.stringify(yaml.parse(raw))
+        const { parse } = await import('yaml')
+        return JSON.stringify(parse(raw))
     } catch (err) {
         console.log(err)
     }
@@ -44,9 +44,9 @@ export default class InputJsonifier extends Component<
                     rows={10}
                     defaultValue={self.props.defaultValue}
                     onChange={(e) => {
-                        self.props.onChange(
-                            ensureStringifiedJson(e.target.value)
-                        )
+                        ensureStringifiedJson(e.target.value).then((json) => {
+                            self.props.onChange(json)
+                        })
                     }}
                 />
             </Fragment>

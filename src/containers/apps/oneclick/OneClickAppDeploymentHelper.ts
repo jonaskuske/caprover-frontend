@@ -40,7 +40,7 @@ export default class OneClickAppDeploymentHelper {
                         }
                     }
                 })
-                .then(function (appDef) {
+                .then(async function (appDef) {
                     if (!appDef) {
                         throw new Error(
                             'App was not found right after registering!!'
@@ -85,7 +85,7 @@ export default class OneClickAppDeploymentHelper {
                     })
 
                     const overrideYaml =
-                        DockerComposeToServiceOverride.convertComposeToService(
+                        await DockerComposeToServiceOverride.convertComposeToService(
                             dockerComposeService
                         )
 

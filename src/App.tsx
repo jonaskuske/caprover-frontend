@@ -7,11 +7,12 @@ import { Provider } from 'react-redux'
 import { HashRouter, Route, Switch } from 'react-router-dom'
 import { applyMiddleware, createStore } from 'redux'
 import thunk from 'redux-thunk'
-import Login from './containers/Login'
 import PageRoot from './containers/PageRoot'
 import reducers from './redux/reducers'
 import CrashReporter from './utils/CrashReporter'
 import StorageHelper from './utils/StorageHelper'
+
+const Login = React.lazy(() => import('./containers/Login'))
 
 CrashReporter.getInstance().init()
 
@@ -37,10 +38,12 @@ const MainComponent = () => {
     return (
         <div className="full-screen">
             <HashRouter>
+                <React.Suspense fallback="">
                     <Switch>
                         <Route path="/login/" component={Login} />
                         <Route path="/" component={PageRoot} />
                     </Switch>
+                </React.Suspense>
             </HashRouter>
         </div>
     )
