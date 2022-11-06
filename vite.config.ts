@@ -1,4 +1,4 @@
-import react from '@vitejs/plugin-react'
+import preact from '@preact/preset-vite'
 import { defineConfig, loadEnv } from 'vite'
 
 export default defineConfig(({ mode }) => {
@@ -11,7 +11,7 @@ export default defineConfig(({ mode }) => {
         },
         server: { port: PORT ? Number(PORT) : undefined },
         build: { outDir: 'build' },
-        plugins: [react()],
+        plugins: [preact()],
         test: { globals: true },
     }
 })
