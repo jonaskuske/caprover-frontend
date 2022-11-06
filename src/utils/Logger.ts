@@ -8,7 +8,7 @@ export default class Logger {
     }
 
     static dev(s: string) {
-        if (process.env.REACT_APP_IS_DEBUG) {
+        if (import.meta.env.VITE_IS_DEBUG) {
             console.log('>>> ', s)
         }
     }

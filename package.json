@@ -3,24 +3,20 @@
     "version": "0.1.0",
     "private": true,
     "dependencies": {
-        "@craco/craco": "^6.2.0",
         "antd": "^4.16.10",
         "axios": "^0.21.1",
         "classnames": "^2.2.6",
         "deep-equal": "^2.0.5",
         "moment": "^2.29.1",
-        "prettier": "^2.2.1",
         "react": "^17.0.2",
         "react-css-theme-switcher": "^0.3.0",
         "react-dom": "^17.0.2",
         "react-markdown": "^6.0.3",
         "react-redux": "^7.2.2",
         "react-router-dom": "^5.2.0",
-        "react-scripts": "4.0.3",
         "redux": "^4.0.5",
         "redux-thunk": "^2.3.0",
         "remark-gfm": "^1.0.0",
-        "web-vitals": "^1.0.1",
         "yaml": "^1.10.0"
     },
     "scripts": {
@@ -28,11 +24,10 @@
         "formatter-write": "prettier --write './src/**/*.ts*'",
         "tslint": "tslint -c tslint.json -p tsconfig.json",
         "tslint-fix": "tslint --fix -c tslint.json -p tsconfig.json",
-        "start": "npx gulp less && craco start",
+        "start": "npx gulp less && vite dev",
         "less-watch": "npx gulp watch",
-        "build": "npx gulp less && craco build",
-        "test": "craco test",
-        "eject": "react-scripts eject"
+        "build": "npx gulp less && vite build",
+        "test": "vitest"
     },
     "eslintConfig": {
         "extends": [
@@ -59,7 +54,6 @@
         "@testing-library/user-event": "^12.1.10",
         "@types/classnames": "^2.2.11",
         "@types/deep-equal": "^1.0.1",
-        "@types/jest": "^26.0.15",
         "@types/node": "^12.0.0",
         "@types/react": "^17.0.2",
         "@types/react-dom": "^17.0.1",
@@ -67,8 +61,7 @@
         "@types/react-router": "^5.1.11",
         "@types/react-router-dom": "^5.1.7",
         "@types/utf8": "^2.1.6",
-        "tslint": "^6.1.3",
-        "typescript": "^4.1.5",
+        "@vitejs/plugin-react": "^2.2.0",
         "gulp": "^4.0.2",
         "gulp-autoprefixer": "^8.0.0",
         "gulp-csso": "^4.0.1",
@@ -76,6 +69,12 @@
         "gulp-less": "^5.0.0",
         "gulp-watch": "^5.0.1",
         "less-plugin-npm-import": "^2.1.0",
-        "tslint-config-prettier": "^1.18.0"
+        "prettier": "^2.7.1",
+        "rollup-plugin-visualizer": "^5.8.3",
+        "tslint": "^6.1.3",
+        "tslint-config-prettier": "^1.18.0",
+        "typescript": "^4.1.5",
+        "vite": "^3.2.2",
+        "vitest": "^0.24.5"
     }
 }

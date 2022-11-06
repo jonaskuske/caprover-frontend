@@ -7,8 +7,8 @@ import Logger from '../utils/Logger'
 import StorageHelper from '../utils/StorageHelper'
 import HttpClient from './HttpClient'
 
-const BASE_DOMAIN = process.env.REACT_APP_API_URL
-    ? process.env.REACT_APP_API_URL.replace(/\/$/, '')
+const BASE_DOMAIN = import.meta.env.VITE_API_URL
+    ? import.meta.env.VITE_API_URL.replace(/\/$/, '')
     : ''
 const URL = BASE_DOMAIN + '/api/v2'
 Logger.dev(`API URL: ${URL}`)

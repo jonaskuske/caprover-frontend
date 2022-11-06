@@ -22,8 +22,8 @@ type AppState = {
 }
 
 const themes = {
-    dark: `dark-theme.css`,
-    light: `light-theme.css`,
+    dark: new URL(`/dark-theme.css`, import.meta.url).href,
+    light: new URL(`/light-theme.css`, import.meta.url).href,
 }
 
 const MainComponent = () => {
@@ -37,10 +37,10 @@ const MainComponent = () => {
     return (
         <div className="full-screen">
             <HashRouter>
-                <Switch>
-                    <Route path="/login/" component={Login} />
-                    <Route path="/" component={PageRoot} />
-                </Switch>
+                    <Switch>
+                        <Route path="/login/" component={Login} />
+                        <Route path="/" component={PageRoot} />
+                    </Switch>
             </HashRouter>
         </div>
     )

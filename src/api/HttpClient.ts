@@ -41,8 +41,7 @@ export default class HttpClient {
         return function (): Promise<any> {
             return Promise.resolve() //
                 .then(function () {
-                    if (!process.env.REACT_APP_IS_DEBUG)
-                        return Promise.resolve()
+                    if (!import.meta.env.VITE_IS_DEBUG) return Promise.resolve()
                     return new Promise<void>(function (res) {
                         setTimeout(res, 500)
                     })
