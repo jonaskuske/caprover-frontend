@@ -685,7 +685,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@testing-library/dom@npm:^8.2.0":
+"@testing-library/dom@npm:^8.19.0":
   version: 8.19.0
   resolution: "@testing-library/dom@npm:8.19.0"
   dependencies:
@@ -701,7 +701,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@testing-library/jest-dom@npm:^5.11.4":
+"@testing-library/jest-dom@npm:^5.16.5":
   version: 5.16.5
   resolution: "@testing-library/jest-dom@npm:5.16.5"
   dependencies:
@@ -718,7 +718,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@testing-library/react@npm:^11.1.0":
+"@testing-library/react@npm:^11.2.7":
   version: 11.2.7
   resolution: "@testing-library/react@npm:11.2.7"
   dependencies:
@@ -731,7 +731,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@testing-library/user-event@npm:^12.1.10":
+"@testing-library/user-event@npm:^12.8.3":
   version: 12.8.3
   resolution: "@testing-library/user-event@npm:12.8.3"
   dependencies:
@@ -772,7 +772,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/classnames@npm:^2.2.11":
+"@types/classnames@npm:^2.3.0":
   version: 2.3.0
   resolution: "@types/classnames@npm:2.3.0"
   dependencies:
@@ -872,7 +872,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:^12.0.0":
+"@types/node@npm:^12.20.55":
   version: 12.20.55
   resolution: "@types/node@npm:12.20.55"
   checksum: e4f86785f4092706e0d3b0edff8dca5a13b45627e4b36700acd8dfe6ad53db71928c8dee914d4276c7fd3b6ccd829aa919811c9eb708a2c8e4c6eb3701178c37
@@ -886,7 +886,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react-redux@npm:^7.1.16, @types/react-redux@npm:^7.1.20":
+"@types/react-redux@npm:^7.1.20, @types/react-redux@npm:^7.1.24":
   version: 7.1.24
   resolution: "@types/react-redux@npm:7.1.24"
   dependencies:
@@ -898,7 +898,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react-router-dom@npm:^5.1.7":
+"@types/react-router-dom@npm:^5.3.3":
   version: 5.3.3
   resolution: "@types/react-router-dom@npm:5.3.3"
   dependencies:
@@ -909,7 +909,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react-router@npm:*, @types/react-router@npm:^5.1.11":
+"@types/react-router@npm:*, @types/react-router@npm:^5.1.19":
   version: 5.1.19
   resolution: "@types/react-router@npm:5.1.19"
   dependencies:
@@ -1218,7 +1218,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"antd@npm:^4.16.10":
+"antd@npm:^4.24.1":
   version: 4.24.1
   resolution: "antd@npm:4.24.1"
   dependencies:
@@ -1277,40 +1277,40 @@ __metadata:
   resolution: "app-frontend@workspace:."
   dependencies:
     "@preact/preset-vite": ^2.4.0
-    "@testing-library/dom": ^8.2.0
-    "@testing-library/jest-dom": ^5.11.4
-    "@testing-library/react": ^11.1.0
-    "@testing-library/user-event": ^12.1.10
-    "@types/classnames": ^2.2.11
+    "@testing-library/dom": ^8.19.0
+    "@testing-library/jest-dom": ^5.16.5
+    "@testing-library/react": ^11.2.7
+    "@testing-library/user-event": ^12.8.3
+    "@types/classnames": ^2.3.0
     "@types/deep-equal": ^1.0.1
-    "@types/node": ^12.0.0
-    "@types/react-redux": ^7.1.16
-    "@types/react-router": ^5.1.11
-    "@types/react-router-dom": ^5.1.7
+    "@types/node": ^12.20.55
+    "@types/react-redux": ^7.1.24
+    "@types/react-router": ^5.1.19
+    "@types/react-router-dom": ^5.3.3
     "@types/utf8": ^2.1.6
     "@typescript-eslint/eslint-plugin": ^5.42.0
     "@typescript-eslint/parser": ^5.42.0
-    antd: ^4.16.10
-    axios: ^0.21.1
-    classnames: ^2.2.6
-    deep-equal: ^2.0.5
+    antd: ^4.24.1
+    axios: ^0.21.4
+    classnames: ^2.3.2
+    deep-equal: ^2.1.0
     eslint: ^8.27.0
     eslint-config-prettier: ^8.5.0
     less: ^4.1.3
-    moment: ^2.29.1
+    moment: ^2.29.4
     preact: ^10.11.2
     prettier: ^2.7.1
     react-css-theme-switcher: ^0.3.0
     react-markdown: ^6.0.3
-    react-redux: ^7.2.2
-    react-router-dom: ^5.2.0
-    redux: ^4.0.5
-    redux-thunk: ^2.3.0
+    react-redux: ^7.2.9
+    react-router-dom: ^5.3.4
+    redux: ^4.2.0
+    redux-thunk: ^2.4.2
     remark-gfm: ^1.0.0
-    typescript: ^4.1.5
+    typescript: ^4.8.4
     vite: ^3.2.2
     vitest: ^0.24.5
-    yaml: ^1.10.0
+    yaml: ^1.10.2
   languageName: unknown
   linkType: soft
 
@@ -1392,7 +1392,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"axios@npm:^0.21.1":
+"axios@npm:^0.21.4":
   version: 0.21.4
   resolution: "axios@npm:0.21.4"
   dependencies:
@@ -1795,7 +1795,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"deep-equal@npm:^2.0.5":
+"deep-equal@npm:^2.0.5, deep-equal@npm:^2.1.0":
   version: 2.1.0
   resolution: "deep-equal@npm:2.1.0"
   dependencies:
@@ -3766,7 +3766,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"moment@npm:^2.24.0, moment@npm:^2.29.1, moment@npm:^2.29.2":
+"moment@npm:^2.24.0, moment@npm:^2.29.2, moment@npm:^2.29.4":
   version: 2.29.4
   resolution: "moment@npm:2.29.4"
   checksum: 0ec3f9c2bcba38dc2451b1daed5daded747f17610b92427bebe1d08d48d8b7bdd8d9197500b072d14e326dd0ccf3e326b9e3d07c5895d3d49e39b6803b76e80e
@@ -4807,7 +4807,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-redux@npm:^7.2.2":
+"react-redux@npm:^7.2.9":
   version: 7.2.9
   resolution: "react-redux@npm:7.2.9"
   dependencies:
@@ -4828,7 +4828,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-router-dom@npm:^5.2.0":
+"react-router-dom@npm:^5.3.4":
   version: 5.3.4
   resolution: "react-router-dom@npm:5.3.4"
   dependencies:
@@ -4885,7 +4885,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"redux-thunk@npm:^2.3.0":
+"redux-thunk@npm:^2.4.2":
   version: 2.4.2
   resolution: "redux-thunk@npm:2.4.2"
   peerDependencies:
@@ -4894,7 +4894,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"redux@npm:^4.0.0, redux@npm:^4.0.5":
+"redux@npm:^4.0.0, redux@npm:^4.2.0":
   version: 4.2.0
   resolution: "redux@npm:4.2.0"
   dependencies:
@@ -5468,7 +5468,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"typescript@npm:^4.1.5":
+"typescript@npm:^4.8.4":
   version: 4.8.4
   resolution: "typescript@npm:4.8.4"
   bin:
@@ -5478,7 +5478,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"typescript@patch:typescript@^4.1.5#~builtin<compat/typescript>":
+"typescript@patch:typescript@^4.8.4#~builtin<compat/typescript>":
   version: 4.8.4
   resolution: "typescript@patch:typescript@npm%3A4.8.4#~builtin<compat/typescript>::version=4.8.4&hash=701156"
   bin:
@@ -5797,7 +5797,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"yaml@npm:^1.10.0":
+"yaml@npm:^1.10.2":
   version: 1.10.2
   resolution: "yaml@npm:1.10.2"
   checksum: ce4ada136e8a78a0b08dc10b4b900936912d15de59905b2bf415b4d33c63df1d555d23acb2a41b23cf9fb5da41c256441afca3d6509de7247daa062fd2c5ea5f
