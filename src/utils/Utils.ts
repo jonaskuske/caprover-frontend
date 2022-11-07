@@ -1,3 +1,7 @@
+import { createContext } from 'react'
+
+export const ContentContext = createContext<HTMLDivElement | null>(null)
+
 const dateFormatter = new Intl.DateTimeFormat('en-US')
 const relativeTimeFormatter = new Intl.RelativeTimeFormat('en-US', {
 	numeric: 'auto',

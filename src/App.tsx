@@ -1,82 +1,45 @@
-import React, { Component } from 'react'
-import {
-    ThemeSwitcherProvider,
-    useThemeSwitcher,
-} from 'react-css-theme-switcher'
-import { Provider } from 'react-redux'
-import { HashRouter, Route, Routes } from 'react-router-dom'
-import { applyMiddleware, createStore } from 'redux'
-import thunk from 'redux-thunk'
+import { lazy } from 'react'
+import { useThemeSwitcher } from 'react-css-theme-switcher'
+import { Route, Routes } from 'react-router'
 import PageRoot from './containers/PageRoot'
-import reducers from './redux/reducers'
-import CrashReporter from './utils/CrashReporter'
-import StorageHelper from './utils/StorageHelper'
 
-const Login = React.lazy(() => import('./containers/Login'))
+const Login = lazy(() => import('./containers/Login'))
+const Dashboard = lazy(() => import('./containers/Dashboard'))
+const Apps = lazy(() => import('./containers/apps/Apps'))
+const AppDetails = lazy(() => import('./containers/apps/appDetails/AppDetails'))
+const Monitoring = lazy(() => import('./containers/monitoring/Monitoring'))
+const Cluster = lazy(() => import('./containers/nodes/Cluster'))
+const Settings = lazy(() => import('./containers/settings/Settings'))
+const CatchAllRoute = lazy(() => import('./containers/CatchAllRoute'))
+const OneClickApps = lazy(
+	() => import('./containers/apps/oneclick/selector/OneClickAppSelector'),
+)
+const OneClickConfig = lazy(
+	() => import('./containers/apps/oneclick/variables/OneClickAppConfigPage'),
+)
 
-CrashReporter.getInstance().init()
+export default function App() {
+	const { status } = useThemeSwitcher()
 
-const createStoreWithMiddleware = applyMiddleware(thunk)(createStore)
-const store = createStoreWithMiddleware(reducers)
-type AppState = {
-    isDarkMode: boolean
+	if (status === 'loading') return null
+
+	return (
+		<div className="full-screen">
+			<Routes>
+				<Route path="/login" element={<Login />} />
+				<Route path="/" element={<PageRoot />}>
+					<Route path="dashboard" element={<Dashboard />} />
+					<Route path="apps" element={<Apps />} />
+					<Route path="apps/details/:appName" element={<AppDetails />} />
+					<Route path="apps/oneclick" element={<OneClickApps />} />
+					<Route path="apps/oneclick/:appName" element={<OneClickConfig />} />
+					<Route path="monitoring" element={<Monitoring />} />
+					<Route path="cluster" element={<Cluster />} />
+					<Route path="settings" element={<Settings />} />
+					<Route path="*" element={<CatchAllRoute />} />
+					<Route index element={<CatchAllRoute />} />
+				</Route>
+			</Routes>
+		</div>
+	)
 }
-
-const darkTheme = import.meta.env.DEV
-    ? new URL(`./styles/dark-theme.less?direct`, import.meta.url).href
-    : `${import.meta.env.BASE_URL}assets/dark-theme.css`
-const lightTheme = import.meta.env.DEV
-    ? new URL(`./styles/light-theme.less?direct`, import.meta.url).href
-    : `${import.meta.env.BASE_URL}assets/light-theme.css`
-
-const themes = {
-    dark: darkTheme,
-    light: lightTheme,
-}
-
-const MainComponent = () => {
-    const { status } = useThemeSwitcher()
-
-    if (status === 'loading') {
-        // Just an empty div until styles load
-        return <div></div>
-    }
-
-    return (
-        <div className="full-screen">
-            <HashRouter>
-                <React.Suspense fallback={null}>
-                    <Routes>
-                        <Route path="/login/" element={<Login />} />
-                        <Route path="/*" element={<PageRoot />} />
-                    </Routes>
-                </React.Suspense>
-            </HashRouter>
-        </div>
-    )
-}
-
-class App extends Component<{}, AppState> {
-    constructor(props: any) {
-        super(props)
-        this.state = {
-            isDarkMode: StorageHelper.getDarkModeFromLocalStorage(),
-        }
-    }
-
-    render() {
-        return (
-            <ThemeSwitcherProvider
-                themeMap={themes}
-                defaultTheme={this.state.isDarkMode ? 'dark' : 'light'}
-                insertionPoint="styles-insertion-point"
-            >
-                <Provider store={store}>
-                    <MainComponent />
-                </Provider>
-            </ThemeSwitcherProvider>
-        )
-    }
-}
-
-export default App

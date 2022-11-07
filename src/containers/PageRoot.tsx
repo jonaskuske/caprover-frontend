@@ -16,8 +16,7 @@ import { connect } from 'react-redux'
 import {
 	Navigate,
 	NavigateFunction,
-	Route,
-	Routes,
+	Outlet,
 	useLocation,
 	useNavigate,
 } from 'react-router'
@@ -25,24 +24,11 @@ import ApiManager from '../api/ApiManager'
 import { IVersionInfo } from '../models/IVersionInfo'
 import * as GlobalActions from '../redux/actions/GlobalActions'
 import StorageHelper from '../utils/StorageHelper'
+import { ContentContext } from '../utils/Utils'
 import ApiComponent from './global/ApiComponent'
 import ClickableLink from './global/ClickableLink'
 import DarkModeSwitch from './global/DarkModeSwitch'
 import NewTabLink from './global/NewTabLink'
-
-const Dashboard = React.lazy(() => import('./Dashboard'))
-const AppDetails = React.lazy(() => import('./apps/appDetails/AppDetails'))
-const Apps = React.lazy(() => import('./apps/Apps'))
-const Monitoring = React.lazy(() => import('./monitoring/Monitoring'))
-const Cluster = React.lazy(() => import('./nodes/Cluster'))
-const Settings = React.lazy(() => import('./settings/Settings'))
-const LoggedInCatchAll = React.lazy(() => import('./LoggedInCatchAll'))
-const OneClickAppConfigPage = React.lazy(
-	() => import('./apps/oneclick/variables/OneClickAppConfigPage'),
-)
-const OneClickAppSelector = React.lazy(
-	() => import('./apps/oneclick/selector/OneClickAppSelector'),
-)
 
 const { Header, Content, Sider } = Layout
 
@@ -353,26 +339,9 @@ class PageRoot extends ApiComponent<
 							id="main-content-layout"
 						>
 							<React.Suspense fallback={null}>
-								<Routes>
-									<Route path="/dashboard/" element={<Dashboard />} />
-									<Route
-										path="/apps/details/:appName"
-										element={<AppDetails mainContainer={self.mainContainer} />}
-									/>
-									<Route
-										path="/apps/oneclick/:appName"
-										element={<OneClickAppConfigPage />}
-									/>
-									<Route
-										path="/apps/oneclick"
-										element={<OneClickAppSelector />}
-									/>
-									<Route path="/apps/" element={<Apps />} />
-									<Route path="/monitoring/" element={<Monitoring />} />
-									<Route path="/cluster/" element={<Cluster />} />
-									<Route path="/settings/" element={<Settings />} />
-									<Route path="/*" element={<LoggedInCatchAll />} />
-								</Routes>
+								<ContentContext.Provider value={self.mainContainer.current}>
+									<Outlet />
+								</ContentContext.Provider>
 							</React.Suspense>
 						</div>
 					</Content>
