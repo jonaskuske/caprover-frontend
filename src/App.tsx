@@ -24,10 +24,10 @@ type AppState = {
 
 const darkTheme = import.meta.env.DEV
     ? new URL(`./styles/dark-theme.less?direct`, import.meta.url).href
-    : `${import.meta.env.BASE_URL}themes/dark-theme.css`
+    : `${import.meta.env.BASE_URL}assets/dark-theme.css`
 const lightTheme = import.meta.env.DEV
     ? new URL(`./styles/light-theme.less?direct`, import.meta.url).href
-    : `${import.meta.env.BASE_URL}themes/light-theme.css`
+    : `${import.meta.env.BASE_URL}assets/light-theme.css`
 
 const themes = {
     dark: darkTheme,
