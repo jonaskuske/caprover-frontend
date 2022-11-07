@@ -71,6 +71,7 @@ export default class ApiManager {
             .then(http.fetch(http.POST, '/login', { password }))
             .then(function (data) {
                 self.setAuthToken(data.token)
+                return data.token
             })
             .catch(function (error) {
                 // Upon wrong password or back-off error, we force logout the user

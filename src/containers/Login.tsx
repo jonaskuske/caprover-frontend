@@ -1,171 +1,107 @@
 import { LockOutlined } from '@ant-design/icons'
-import { Button, Card, Collapse, Input, Radio, Row } from 'antd'
-import React from 'react'
-import { Navigate, NavigateFunction, useNavigate } from 'react-router'
+import { Button, Card, Collapse, Form, Input, Radio, Row, Space } from 'antd'
+import { useEffect, useState } from 'react'
+import { Navigate, useLocation, useNavigate } from 'react-router'
 import ApiManager from '../api/ApiManager'
 import StorageHelper from '../utils/StorageHelper'
 import Toaster from '../utils/Toaster'
 import Utils from '../utils/Utils'
-import ApiComponent from './global/ApiComponent'
+import { useApiManager } from './global/ApiComponent'
 
-const NO_SESSION = 1
-const SESSION_STORAGE = 2
-const LOCAL_STORAGE = 3
+const Item = Form.Item
 
-export default function RoutedLogin(props: any) {
-    const navigate = useNavigate()
-    return <Login navigate={navigate} {...props} />
+enum Persistence {
+	None = '1',
+	Session = '2',
+	Permanent = '3',
 }
 
-class Login extends ApiComponent<{ navigate: NavigateFunction }, any> {
-    constructor(props: any) {
-        super(props)
-        this.state = {
-            loginOption: NO_SESSION,
-        }
-    }
-
-    componentDidMount() {
-        if (super.componentDidMount) super.componentDidMount()
-
-        Utils.deleteAllCookies()
-    }
-
-    onLoginRequested(password: string) {
-        const self = this
-        this.apiManager
-            .getAuthToken(password)
-            .then(function () {
-                if (self.state.loginOption === SESSION_STORAGE) {
-                    StorageHelper.setAuthKeyInSessionStorage(
-                        ApiManager.getAuthTokenString()
-                    )
-                } else if (self.state.loginOption === LOCAL_STORAGE) {
-                    StorageHelper.setAuthKeyInLocalStorage(
-                        ApiManager.getAuthTokenString()
-                    )
-                }
-                self.props.navigate('/')
-            })
-            .catch(Toaster.createCatcher())
-    }
-
-    render() {
-        const self = this
-
-        if (ApiManager.isLoggedIn()) return <Navigate to="/" />
-
-        return (
-            <div>
-                <div
-                    style={{
-                        position: 'absolute',
-                        left: '50%',
-                        top: '50%',
-                        transform: 'translate(-50%,-50%)',
-                    }}
-                >
-                    <Card title="CapRover Login" style={{ width: 380 }}>
-                        <NormalLoginForm
-                            onLoginRequested={(
-                                password: string,
-                                loginOption: number
-                            ) => {
-                                self.setState({ loginOption })
-                                self.onLoginRequested(password)
-                            }}
-                        />
-                    </Card>
-                </div>
-            </div>
-        )
-    }
+type LoginData = {
+	password: string
+	persistence: Persistence
 }
 
-const radioStyle = {
-    display: 'block',
-    height: '30px',
-    lineHeight: '30px',
-}
+export default function Login() {
+	const navigate = useNavigate()
+	const location = useLocation()
 
-class NormalLoginForm extends React.Component<
-    any,
-    {
-        loginOption: number
-        passwordEntered: string
-    }
-> {
-    constructor(props: any) {
-        super(props)
-        this.state = {
-            loginOption: NO_SESSION,
-            passwordEntered: ``,
-        }
-    }
+	const apiManager = useApiManager()
+	const [isSubmitting, setIsSubmitting] = useState(false)
 
-    handleSubmit = () => {
-        const self = this
-        self.props.onLoginRequested(
-            self.state.passwordEntered,
-            self.state.loginOption
-        )
-    }
+	const isLoggedIn = ApiManager.isLoggedIn()
 
-    render() {
-        const self = this
-        return (
-            <div>
-                <Input.Password
-                    onKeyDown={(key) => {
-                        if (key.keyCode === 13) {
-                            self.handleSubmit()
-                        }
-                    }}
-                    prefix={<LockOutlined style={{ opacity: 0.3 }} />}
-                    onChange={(e) => {
-                        self.setState({ passwordEntered: `${e.target.value}` })
-                    }}
-                    placeholder="Password"
-                    autoFocus
-                />
-                <div style={{ marginTop: 20, marginBottom: 20 }}>
-                    <Row justify="end">
-                        <Button
-                            type="primary"
-                            htmlType="submit"
-                            className="login-form-button"
-                            onClick={() => {
-                                self.handleSubmit()
-                            }}
-                        >
-                            Login
-                        </Button>
-                    </Row>
-                </div>
-                <Collapse>
-                    <Collapse.Panel header="Remember Me" key="1">
-                        <Radio.Group
-                            onChange={(e) => {
-                                console.log(e.target.value)
-                                self.setState({
-                                    loginOption: e.target.value,
-                                })
-                            }}
-                            value={self.state.loginOption}
-                        >
-                            <Radio style={radioStyle} value={NO_SESSION}>
-                                No session persistence (Most Secure)
-                            </Radio>
-                            <Radio style={radioStyle} value={SESSION_STORAGE}>
-                                Use sessionStorage
-                            </Radio>
-                            <Radio style={radioStyle} value={LOCAL_STORAGE}>
-                                Use localStorage (Most Persistent)
-                            </Radio>
-                        </Radio.Group>
-                    </Collapse.Panel>
-                </Collapse>
-            </div>
-        )
-    }
+	useEffect(() => {
+		if (!isLoggedIn) Utils.deleteAllCookies()
+	}, [isLoggedIn])
+
+	async function handleSubmit({ password, persistence }: LoginData) {
+		try {
+			setIsSubmitting(true)
+			const token = await apiManager.getAuthToken(password)
+
+			if (persistence === Persistence.Session) {
+				StorageHelper.setAuthKeyInSessionStorage(token)
+			} else if (persistence === Persistence.Permanent) {
+				StorageHelper.setAuthKeyInLocalStorage(token)
+			}
+
+			navigate(location.state.from ?? '/', { replace: true })
+		} catch (err) {
+			setIsSubmitting(false)
+			Toaster.toast(err)
+		}
+	}
+
+	if (isLoggedIn) return <Navigate to={location.state.from ?? '/'} replace />
+
+	const intialData: LoginData = { persistence: Persistence.None, password: '' }
+
+	return (
+		<Row align="middle" justify="center" style={{ height: '100%', padding: 8 }}>
+			<Card title="CapRover Login" style={{ width: '100%', maxWidth: 380 }}>
+				<Form
+					disabled={isSubmitting}
+					onFinish={(data: LoginData) => handleSubmit(data)}
+					initialValues={intialData}
+				>
+					<Space direction="vertical" size="large" style={{ width: '100%' }}>
+						<Item name="password" rules={[{ required: true, message: '' }]}>
+							<Input.Password
+								prefix={<LockOutlined />}
+								placeholder="Password"
+								aria-label="Password"
+								autoFocus
+							/>
+						</Item>
+
+						<Row justify="end" style={{ marginTop: -24 }}>
+							<Button type="primary" htmlType="submit">
+								Login
+							</Button>
+						</Row>
+
+						<Collapse>
+							<Collapse.Panel header="Remember Me" key="1" forceRender>
+								<Item noStyle name="persistence">
+									<Radio.Group>
+										<Space direction="vertical">
+											<Radio value={Persistence.None}>
+												No session persistence (Most Secure)
+											</Radio>
+											<Radio value={Persistence.Session}>
+												Use sessionStorage
+											</Radio>
+											<Radio value={Persistence.Permanent}>
+												Use localStorage (Most Persistent)
+											</Radio>
+										</Space>
+									</Radio.Group>
+								</Item>
+							</Collapse.Panel>
+						</Collapse>
+					</Space>
+				</Form>
+			</Card>
+		</Row>
+	)
 }
