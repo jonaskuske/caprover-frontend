@@ -1,8 +1,7 @@
 import { LoadingOutlined } from '@ant-design/icons'
 import { Alert, Button, Card, Col, Row, Steps } from 'antd'
-import React, { Component } from 'react'
+import { Component } from 'react'
 import ReactMarkdown from 'react-markdown'
-import { Prompt } from 'react-router-dom'
 import { IDeploymentState } from './OneClickAppDeployManager'
 
 const Step = Steps.Step
@@ -52,15 +51,17 @@ export default class OneClickAppDeployProgress extends Component<{
         return !successMessage && !error
     }
 
+    // Not available in React Router v6 - https://github.com/remix-run/react-router/issues/8139
     blockNavigationIfRunning() {
-        return (
-            <Prompt
-                when={this.isRunning()}
-                message={`A deployment is running!
-Are you sure you want to leave this page?
-It will interrupt the deployment at the current step, leaving the applications in potentially inconsistent state.`}
-            />
-        )
+        return null
+        //         return (
+        //             <Prompt
+        //                 when={this.isRunning()}
+        //                 message={`A deployment is running!
+        // Are you sure you want to leave this page?
+        // It will interrupt the deployment at the current step, leaving the applications in potentially inconsistent state.`}
+        //             />
+        //         )
     }
 
     render() {
