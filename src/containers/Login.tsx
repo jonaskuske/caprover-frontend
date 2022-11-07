@@ -121,9 +121,7 @@ class NormalLoginForm extends React.Component<
                             self.handleSubmit()
                         }
                     }}
-                    prefix={
-                        <LockOutlined style={{ color: 'rgba(0,0,0,.25)' }} />
-                    }
+                    prefix={<LockOutlined style={{ opacity: 0.3 }} />}
                     onChange={(e) => {
                         self.setState({ passwordEntered: `${e.target.value}` })
                     }}
