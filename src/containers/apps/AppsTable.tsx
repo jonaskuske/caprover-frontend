@@ -7,7 +7,6 @@ import {
 } from '@ant-design/icons'
 import { Card, Col, Input, Row, Table, Tooltip } from 'antd'
 import { ColumnProps } from 'antd/lib/table'
-import { History } from 'history'
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
@@ -21,7 +20,6 @@ type TableData = IAppDef & { lastDeployTime: string }
 
 class AppsTable extends Component<
     {
-        history: History
         apps: IAppDef[]
         rootDomain: string
         defaultNginxConfig: string

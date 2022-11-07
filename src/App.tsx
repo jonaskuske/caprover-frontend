@@ -4,7 +4,7 @@ import {
     useThemeSwitcher,
 } from 'react-css-theme-switcher'
 import { Provider } from 'react-redux'
-import { HashRouter, Route, Switch } from 'react-router-dom'
+import { HashRouter, Route, Routes } from 'react-router-dom'
 import { applyMiddleware, createStore } from 'redux'
 import thunk from 'redux-thunk'
 import PageRoot from './containers/PageRoot'
@@ -45,11 +45,11 @@ const MainComponent = () => {
     return (
         <div className="full-screen">
             <HashRouter>
-                <React.Suspense fallback="">
-                    <Switch>
-                        <Route path="/login/" component={Login} />
-                        <Route path="/" component={PageRoot} />
-                    </Switch>
+                <React.Suspense fallback={null}>
+                    <Routes>
+                        <Route path="/login/" element={<Login />} />
+                        <Route path="/*" element={<PageRoot />} />
+                    </Routes>
                 </React.Suspense>
             </HashRouter>
         </div>

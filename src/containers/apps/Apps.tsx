@@ -1,5 +1,4 @@
 import React from 'react'
-import { RouteComponentProps } from 'react-router'
 import Toaster from '../../utils/Toaster'
 import ApiComponent from '../global/ApiComponent'
 import CenteredSpinner from '../global/CenteredSpinner'
@@ -9,7 +8,7 @@ import AppsTable from './AppsTable'
 import CreateNewApp from './CreateNewApp'
 
 export default class Apps extends ApiComponent<
-    RouteComponentProps<any>,
+    {},
     {
         isLoading: boolean
         apiData:
@@ -76,7 +75,6 @@ export default class Apps extends ApiComponent<
                 <div style={{ height: 25 }} />
                 {apiData.appDefinitions.length > 0 ? (
                     <AppsTable
-                        history={this.props.history}
                         defaultNginxConfig={apiData.defaultNginxConfig}
                         apps={apiData.appDefinitions}
                         rootDomain={apiData.rootDomain}

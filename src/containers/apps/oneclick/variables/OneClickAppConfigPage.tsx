@@ -1,6 +1,12 @@
 import { Card, Col, message, Row } from 'antd'
 import ReactMarkdown from 'react-markdown'
-import { RouteComponentProps } from 'react-router'
+import {
+    NavigateFunction,
+    Params,
+    useLocation,
+    useNavigate,
+    useParams,
+} from 'react-router'
 import gfm from 'remark-gfm'
 import { IOneClickTemplate } from '../../../../models/IOneClickAppModels'
 import DomUtils from '../../../../utils/DomUtils'
@@ -21,8 +27,22 @@ import OneClickVariablesSection from './OneClickVariablesSection'
 export const ONE_CLICK_APP_NAME_VAR_NAME = '$$cap_appname'
 export const ONE_CLICK_ROOT_DOMAIN_VAR_NAME = '$$cap_root_domain'
 
-export default class OneClickAppConfigPage extends ApiComponent<
-    RouteComponentProps<any>,
+export default function RoutedOneClickAppConfigPage(props: any) {
+    const navigate = useNavigate()
+    const location = useLocation()
+    const params = useParams()
+    return (
+        <OneClickAppConfigPage
+            navigate={navigate}
+            location={location}
+            params={params}
+            {...props}
+        />
+    )
+}
+
+class OneClickAppConfigPage extends ApiComponent<
+    { navigate: NavigateFunction; location: Location; params: Params },
     {
         apiData: IOneClickTemplate | undefined
         rootDomain: string
@@ -59,7 +79,7 @@ export default class OneClickAppConfigPage extends ApiComponent<
     componentDidMount() {
         const self = this
 
-        const appNameFromPath = this.props.match.params.appName
+        const appNameFromPath = this.props.params.appName
         const qs = new URLSearchParams(self.props.location.search)
         const baseDomainFromPath = qs.get('baseDomain')
         let promiseToFetchOneClick =
@@ -129,8 +149,8 @@ export default class OneClickAppConfigPage extends ApiComponent<
         const displayName =
             apiData && apiData.caproverOneClickApp.displayName
                 ? apiData.caproverOneClickApp.displayName
-                : self.props.match.params.appName[0].toUpperCase() +
-                  self.props.match.params.appName.slice(1)
+                : self.props.params.appName[0].toUpperCase() +
+                  self.props.params.appName.slice(1)
 
         if (!apiData) {
             return <CenteredSpinner />
@@ -139,9 +159,9 @@ export default class OneClickAppConfigPage extends ApiComponent<
         if (!!deploymentState) {
             return (
                 <OneClickAppDeployProgress
-                    appName={self.props.match.params.appName}
+                    appName={self.props.params.appName}
                     deploymentState={deploymentState}
-                    onFinishClicked={() => self.props.history.push('/apps')}
+                    onFinishClicked={() => self.props.navigate('/apps')}
                     onRestartClicked={() =>
                         self.setState({ deploymentState: undefined })
                     }

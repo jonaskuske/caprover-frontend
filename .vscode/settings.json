@@ -4,7 +4,8 @@
         "**/node_modules": true,
         "**/bower_components": true,
         "**/build": true,
-        "**/coverge": true
+        "**/coverge": true,
+        "**/.yarn": true
     },
     "editor.formatOnSave": true,
     "editor.codeActionsOnSave": {

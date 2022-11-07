@@ -21,9 +21,9 @@ import {
     Tooltip,
 } from 'antd'
 import classnames from 'classnames'
-import React, { RefObject } from 'react'
+import { RefObject } from 'react'
 import { connect } from 'react-redux'
-import { RouteComponentProps } from 'react-router'
+import { NavigateFunction, Params, useNavigate, useParams } from 'react-router'
 import ApiManager from '../../../api/ApiManager'
 import { IMobileComponent } from '../../../models/ContainerProps'
 import { IHashMapGeneric } from '../../../models/IHashMapGeneric'
@@ -61,9 +61,11 @@ export interface AppDetailsTabProps {
     isMobile: boolean
 }
 
-interface PropsInterface extends RouteComponentProps<any> {
+interface PropsInterface {
     mainContainer: RefObject<HTMLDivElement>
     isMobile: boolean
+    params: Params
+    navigate: NavigateFunction
 }
 
 class AppDetails extends ApiComponent<
@@ -91,7 +93,7 @@ class AppDetails extends ApiComponent<
     }
 
     goBackToApps() {
-        this.props.history.push('/apps')
+        this.props.navigate('/apps')
     }
 
     openRenameAppDialog() {
@@ -580,7 +582,7 @@ class AppDetails extends ApiComponent<
                     index++
                 ) {
                     const element = data.appDefinitions[index]
-                    if (element.appName === self.props.match.params.appName) {
+                    if (element.appName === self.props.params.appName) {
                         self.setState({
                             isLoading: false,
                             apiData: {
@@ -610,7 +612,13 @@ function mapStateToProps(state: any) {
     }
 }
 
+function RoutedAppDetails(props: any) {
+    const navigate = useNavigate()
+    const params = useParams()
+    return <AppDetails navigate={navigate} params={params} {...props} />
+}
+
 export default connect<IMobileComponent, any, any>(
     mapStateToProps,
     undefined
-)(AppDetails)
+)(RoutedAppDetails)

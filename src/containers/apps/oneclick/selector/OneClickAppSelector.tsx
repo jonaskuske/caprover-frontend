@@ -1,6 +1,5 @@
 import { Alert, Button, Card, Col, Row } from 'antd'
-import React from 'react'
-import { RouteComponentProps } from 'react-router'
+import { NavigateFunction, useNavigate } from 'react-router'
 import { IOneClickAppIdentifier } from '../../../../models/IOneClickAppModels'
 import Toaster from '../../../../utils/Toaster'
 import Utils from '../../../../utils/Utils'
@@ -14,8 +13,13 @@ import OneClickReposList from './OneClickReposList'
 export const TEMPLATE_ONE_CLICK_APP = 'TEMPLATE_ONE_CLICK_APP'
 export const ONE_CLICK_APP_STRINGIFIED_KEY = 'oneClickAppStringifiedData'
 
-export default class OneClickAppSelector extends ApiComponent<
-    RouteComponentProps<any>,
+export default function RoutedOneClickAppSelector(props: any) {
+    const navigate = useNavigate()
+    return <OneClickAppSelector navigate={navigate} {...props} />
+}
+
+class OneClickAppSelector extends ApiComponent<
+    { navigate: NavigateFunction },
     {
         oneClickAppList: IOneClickAppIdentifier[] | undefined
         isCustomTemplateSelected: boolean
@@ -120,7 +124,7 @@ export default class OneClickAppSelector extends ApiComponent<
                 <Row justify="space-between" align="middle">
                     <Button
                         onClick={() =>
-                            self.props.history.push(
+                            self.props.navigate(
                                 `/apps/oneclick/${TEMPLATE_ONE_CLICK_APP}` +
                                     (`?${ONE_CLICK_APP_STRINGIFIED_KEY}=` +
                                         encodeURIComponent(

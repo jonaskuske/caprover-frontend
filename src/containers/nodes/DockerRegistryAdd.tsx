@@ -62,7 +62,7 @@ export default class DockerRegistryAdd extends Component<
                             registryType: IRegistryTypes.LOCAL_REG, // Other values are getting ignored by the downstream callback
                         } as IRegistryInfo)
                     }}
-                    visible={self.state.modalShowing === ADDING_LOCAL}
+                    open={self.state.modalShowing === ADDING_LOCAL}
                 >
                     <p>
                         You can read more about this type of registry on the
@@ -82,7 +82,7 @@ export default class DockerRegistryAdd extends Component<
                             self.state.remoteRegistryToAdd
                         )
                     }}
-                    visible={self.state.modalShowing === ADDING_REMOTE}
+                    open={self.state.modalShowing === ADDING_REMOTE}
                 >
                     <p>
                         You can read more about this type of registry on the

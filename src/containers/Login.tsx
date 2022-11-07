@@ -1,7 +1,7 @@
 import { LockOutlined } from '@ant-design/icons'
 import { Button, Card, Collapse, Input, Radio, Row } from 'antd'
 import React from 'react'
-import { Redirect, RouteComponentProps } from 'react-router'
+import { Navigate, NavigateFunction, useNavigate } from 'react-router'
 import ApiManager from '../api/ApiManager'
 import StorageHelper from '../utils/StorageHelper'
 import Toaster from '../utils/Toaster'
@@ -12,7 +12,12 @@ const NO_SESSION = 1
 const SESSION_STORAGE = 2
 const LOCAL_STORAGE = 3
 
-export default class Login extends ApiComponent<RouteComponentProps<any>, any> {
+export default function RoutedLogin(props: any) {
+    const navigate = useNavigate()
+    return <Login navigate={navigate} {...props} />
+}
+
+class Login extends ApiComponent<{ navigate: NavigateFunction }, any> {
     constructor(props: any) {
         super(props)
         this.state = {
@@ -40,7 +45,7 @@ export default class Login extends ApiComponent<RouteComponentProps<any>, any> {
                         ApiManager.getAuthTokenString()
                     )
                 }
-                self.props.history.push('/')
+                self.props.navigate('/')
             })
             .catch(Toaster.createCatcher())
     }
@@ -48,7 +53,7 @@ export default class Login extends ApiComponent<RouteComponentProps<any>, any> {
     render() {
         const self = this
 
-        if (ApiManager.isLoggedIn()) return <Redirect to="/" />
+        if (ApiManager.isLoggedIn()) return <Navigate to="/" />
 
         return (
             <div>

@@ -13,8 +13,14 @@ import {
 import { Button, Col, Layout, Menu, Row } from 'antd'
 import React, { Fragment, RefObject } from 'react'
 import { connect } from 'react-redux'
-import { Route, RouteComponentProps, Switch } from 'react-router'
-import { Link } from 'react-router-dom'
+import {
+    Navigate,
+    NavigateFunction,
+    Route,
+    Routes,
+    useLocation,
+    useNavigate,
+} from 'react-router'
 import ApiManager from '../api/ApiManager'
 import { IVersionInfo } from '../models/IVersionInfo'
 import * as GlobalActions from '../redux/actions/GlobalActions'
@@ -42,36 +48,38 @@ const { Header, Content, Sider } = Layout
 
 const MENU_ITEMS = [
     {
-        key: 'dashboard',
-        name: 'Dashboard',
+        key: '/dashboard',
+        label: 'Dashboard',
         icon: <LaptopOutlined />,
     },
     {
-        key: 'apps',
-        name: 'Apps',
+        key: '/apps',
+        label: 'Apps',
         icon: <CodeOutlined />,
     },
     {
-        key: 'monitoring',
-        name: 'Monitoring',
+        key: '/monitoring',
+        label: 'Monitoring',
         icon: <DashboardOutlined />,
     },
     {
-        key: 'cluster',
-        name: 'Cluster',
+        key: '/cluster',
+        label: 'Cluster',
         icon: <ClusterOutlined />,
     },
     {
-        key: 'settings',
-        name: 'Settings',
+        key: '/settings',
+        label: 'Settings',
         icon: <SettingOutlined />,
     },
 ]
 
-interface RootPageInterface extends RouteComponentProps<any> {
+interface RootPageInterface {
     rootElementKey: string
     emitSizeChanged: () => void
     isMobile: boolean
+    location: Location
+    navigate: NavigateFunction
 }
 
 class PageRoot extends ApiComponent<
@@ -117,9 +125,7 @@ class PageRoot extends ApiComponent<
 
         window.addEventListener('resize', this.updateDimensions)
 
-        if (!ApiManager.isLoggedIn()) {
-            this.goToLogin()
-        } else {
+        if (ApiManager.isLoggedIn()) {
             this.apiManager
                 .getVersionInfo()
                 .then(function (data) {
@@ -136,7 +142,7 @@ class PageRoot extends ApiComponent<
     }
 
     goToLogin() {
-        this.props.history.push('/login')
+        this.props.navigate('/login')
     }
 
     createUpdateAvailableIfNeeded() {
@@ -149,7 +155,7 @@ class PageRoot extends ApiComponent<
         return (
             <Fragment>
                 <ClickableLink
-                    onLinkClicked={() => self.props.history.push('/settings')}
+                    onLinkClicked={() => self.props.navigate('/settings')}
                 >
                     <GiftTwoTone
                         style={{
@@ -186,7 +192,13 @@ class PageRoot extends ApiComponent<
     }
 
     render() {
+        // return null
         const self = this
+
+        if (!ApiManager.isLoggedIn()) {
+            return <Navigate to="/login" />
+        }
+
         return (
             <Layout className="full-screen">
                 <Header
@@ -295,72 +307,45 @@ class PageRoot extends ApiComponent<
                             theme="dark"
                             mode="inline"
                             defaultSelectedKeys={['dashboard']}
-                            style={{ height: '100%', borderRight: 0 }}
-                        >
-                            {MENU_ITEMS.map((item) => (
-                                <Menu.Item key={item.key}>
-                                    <Link
-                                        to={`/${item.key}`}
-                                        className="nav-text"
-                                    >
-                                        {item.icon}
-                                        <span>{item.name}</span>
-                                    </Link>
-                                </Menu.Item>
-                            ))}
-
-                            {this.props.isMobile && (
-                                <Fragment>
-                                    <div
-                                        style={{
-                                            backgroundColor:
-                                                'rgba(255, 255, 255, 0.65)',
-                                            height: 1,
-                                            width: '80%',
-                                            margin: '15px auto',
-                                        }}
-                                    />
-                                    <div
-                                        className="ant-menu-item"
-                                        role="menuitem"
-                                        style={{ paddingLeft: 24 }}
-                                    >
-                                        <NewTabLink url="https://github.com/caprover/caprover">
-                                            <GithubOutlined />
-                                            GitHub
-                                        </NewTabLink>
-                                    </div>
-
-                                    <div
-                                        className="ant-menu-item"
-                                        role="menuitem"
-                                        style={{ paddingLeft: 24 }}
-                                    >
-                                        <NewTabLink url="https://caprover.com">
-                                            <FileTextOutlined />
-                                            Docs
-                                        </NewTabLink>
-                                    </div>
-
-                                    <div
-                                        className="ant-menu-item"
-                                        role="menuitem"
-                                        style={{ paddingLeft: 24 }}
-                                    >
-                                        <ClickableLink
-                                            onLinkClicked={() => {
-                                                this.apiManager.setAuthToken('')
-                                                this.goToLogin()
-                                            }}
-                                        >
-                                            {' '}
-                                            <LogoutOutlined />
-                                            Logout
-                                        </ClickableLink>
-                                    </div>
-                                </Fragment>
-                            )}
-                        </Menu>
+                            style={{ borderRight: 0 }}
+                            onClick={({ key }) => {
+                                if (key === 'logout') {
+                                    this.apiManager.setAuthToken('')
+                                    this.goToLogin()
+                                } else if (/https?:\/\//.test(key)) {
+                                    window.open(
+                                        key,
+                                        '_blank',
+                                        'noopener,noreferrer'
+                                    )
+                                } else {
+                                    this.props.navigate(`${key}`)
+                                }
+                            }}
+                            items={
+                                this.props.isMobile
+                                    ? [
+                                          ...MENU_ITEMS,
+                                          { type: 'divider' },
+                                          {
+                                              key: 'https://github.com/caprover/caprover',
+                                              label: 'GitHub!',
+                                              icon: <GithubOutlined />,
+                                          },
+                                          {
+                                              key: 'https://caprover.com',
+                                              label: 'Docs',
+                                              icon: <FileTextOutlined />,
+                                          },
+                                          {
+                                              key: 'logout',
+                                              label: 'Logout',
+                                              icon: <LogoutOutlined />,
+                                          },
+                                      ]
+                                    : MENU_ITEMS
+                            }
+                        ></Menu>
                     </Sider>
                     <Content>
                         <div
@@ -380,49 +365,48 @@ class PageRoot extends ApiComponent<
                             }}
                             id="main-content-layout"
                         >
-                            <React.Suspense fallback="">
-                                <Switch>
+                            <React.Suspense fallback={null}>
+                                <Routes>
                                     <Route
                                         path="/dashboard/"
-                                        component={Dashboard}
+                                        element={<Dashboard />}
                                     />
                                     <Route
                                         path="/apps/details/:appName"
-                                        render={(props) => (
+                                        element={
                                             <AppDetails
-                                                {...props}
                                                 mainContainer={
                                                     self.mainContainer
                                                 }
                                             />
-                                        )}
+                                        }
                                     />
                                     <Route
                                         path="/apps/oneclick/:appName"
-                                        component={OneClickAppConfigPage}
+                                        element={<OneClickAppConfigPage />}
                                     />
                                     <Route
                                         path="/apps/oneclick"
-                                        component={OneClickAppSelector}
+                                        element={<OneClickAppSelector />}
                                     />
-                                    <Route path="/apps/" component={Apps} />
+                                    <Route path="/apps/" element={<Apps />} />
                                     <Route
                                         path="/monitoring/"
-                                        component={Monitoring}
+                                        element={<Monitoring />}
                                     />
                                     <Route
                                         path="/cluster/"
-                                        component={Cluster}
+                                        element={<Cluster />}
                                     />
                                     <Route
                                         path="/settings/"
-                                        component={Settings}
+                                        element={<Settings />}
                                     />
                                     <Route
-                                        path="/"
-                                        component={LoggedInCatchAll}
+                                        path="/*"
+                                        element={<LoggedInCatchAll />}
                                     />
-                                </Switch>
+                                </Routes>
                             </React.Suspense>
                         </div>
                     </Content>
@@ -439,6 +423,12 @@ function mapStateToProps(state: any) {
     }
 }
 
+function RoutedPageRoot(props: any) {
+    const location = useLocation()
+    const navigate = useNavigate()
+    return <PageRoot location={location} navigate={navigate} {...props} />
+}
+
 export default connect(mapStateToProps, {
     emitSizeChanged: GlobalActions.emitSizeChanged,
-})(PageRoot)
+})(RoutedPageRoot)

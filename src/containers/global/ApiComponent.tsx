@@ -15,4 +15,8 @@ export default class ApiComponent<P = {}, S = {}> extends Component<P, S> {
         this.willUnmountSoon = true
         this.apiManager.destroy()
     }
+
+    render() {
+        return null
+    }
 }

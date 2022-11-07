@@ -1,6 +1,5 @@
 import { Button, Card, Col, Input, Modal, Row, Tooltip } from 'antd'
-import React from 'react'
-import { Redirect, RouteComponentProps } from 'react-router'
+import { Navigate, useLocation } from 'react-router'
 import AppConstants from '../utils/AppConstants'
 import Toaster from '../utils/Toaster'
 import ApiComponent from './global/ApiComponent'
@@ -9,8 +8,13 @@ import ErrorRetry from './global/ErrorRetry'
 import NewTabLink from './global/NewTabLink'
 const Search = Input.Search
 
-export default class Dashboard extends ApiComponent<
-    RouteComponentProps<any>,
+export default function RoutedDashboard(props: any) {
+    const location = useLocation()
+    return <Dashboard location={location} {...props} />
+}
+
+class Dashboard extends ApiComponent<
+    { location: Location },
     {
         isLoading: boolean
         isForceChangingDomain: boolean
@@ -272,7 +276,7 @@ export default class Dashboard extends ApiComponent<
             !!this.state.apiData.forceSsl &&
             !!qs.get(AppConstants.REDIRECT_TO_APPS_IF_READY_REQ_PARAM)
         ) {
-            return <Redirect to="/apps" />
+            return <Navigate to="/apps" />
         }
 
         return (
@@ -290,7 +294,7 @@ export default class Dashboard extends ApiComponent<
         const self = this
         if (this.state.apiData.forceSsl && !self.state.isForceChangingDomain) {
             // User has set up the machine, no need to update your domain again - unless user really wants this!
-            return undefined
+            return null
         }
 
         return (
@@ -389,7 +393,7 @@ export default class Dashboard extends ApiComponent<
     createInitialSetupIfNoRootSsl() {
         if (this.state.apiData.hasRootSsl) {
             // User has set up the machine, no need to show the welcome message
-            return <div />
+            return null
         }
 
         return (
@@ -444,7 +448,7 @@ export default class Dashboard extends ApiComponent<
         const self = this
         if (!this.state.apiData.forceSsl) {
             // User has not fully set up the machine, do not show the post installation message
-            return undefined
+            return null
         }
 
         return (
