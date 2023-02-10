@@ -1,12 +1,11 @@
-import React, { Component } from 'react'
+type Props = JSX.IntrinsicElements['a'] & {
+    url?: string
+    children?: React.ReactNode
+}
 
-export default class NewTabLink extends Component<{ url: string }, {}> {
-    render() {
-        // eslint-disable-next-line
-        return (
-            <a href={this.props.url} target="_blank" rel="noopener noreferrer">
-                {this.props.children}
-            </a>
-        )
-    }
+export default function NewTabLink({ url, href, ...props }: Props) {
+    href ??= url
+    return (
+        <a target="_blank" rel="noopener noreferrer" href={href} {...props} />
+    )
 }

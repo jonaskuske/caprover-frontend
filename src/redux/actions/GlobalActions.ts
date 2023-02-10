@@ -7,9 +7,9 @@ export function emitRootKeyChanged() {
     }
 }
 
-export function emitSizeChanged() {
+export function emitSizeChanged(isMobile: boolean) {
     return {
         type: SIZE_CHANGED,
-        payload: {},
+        payload: isMobile,
     }
 }

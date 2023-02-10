@@ -35,29 +35,28 @@ class StorageHelper {
         sessionStorage.setItem(AUTH_KEY, '')
     }
 
-    setSiderCollapsedStateInLocalStorage(siderCollapsed: boolean) {
-        localStorage.setItem(
-            SIDER_COLLAPSED_STATE,
-            JSON.stringify(siderCollapsed)
-        )
+    setSiderCollapsedStateInLocalStorage(value: boolean) {
+        localStorage.setItem(SIDER_COLLAPSED_STATE, JSON.stringify(value))
     }
 
-    getSiderCollapsedStateFromLocalStorage(): boolean {
-        const storageValue = localStorage.getItem(SIDER_COLLAPSED_STATE)
-        return storageValue && JSON.parse(storageValue)
+    getSiderCollapsedStateFromLocalStorage() {
+        const value = localStorage.getItem(SIDER_COLLAPSED_STATE)
+        return value ? (JSON.parse(value) as boolean) : null
     }
 
     setDarkModeInLocalStorage(isDarkMode: boolean) {
         localStorage.setItem(DARK_MODE, JSON.stringify(isDarkMode))
     }
 
-    getDarkModeFromLocalStorage(): boolean {
-        const isDarkMode = localStorage.getItem(DARK_MODE)
+    getThemeFromLocalStorage(): 'dark' | 'light' {
+        const stored = localStorage.getItem(DARK_MODE)
         // If not preference exists, return DarkMode based on users colorScheme
-        return isDarkMode
-            ? JSON.parse(isDarkMode)
-            : window.matchMedia &&
-                  window.matchMedia('(prefers-color-scheme: dark)').matches
+
+        const isDarkMode = stored
+            ? JSON.parse(stored)
+            : window?.matchMedia('(prefers-color-scheme: dark)').matches
+
+        return isDarkMode ? 'dark' : 'light'
     }
 }
 

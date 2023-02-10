@@ -1,4 +1,4 @@
-import { lazy } from 'react'
+import { lazy, useEffect, useState } from 'react'
 import { useThemeSwitcher } from 'react-css-theme-switcher'
 import { Route, Routes } from 'react-router'
 import PageRoot from './containers/PageRoot'
@@ -12,16 +12,20 @@ const Cluster = lazy(() => import('./containers/nodes/Cluster'))
 const Settings = lazy(() => import('./containers/settings/Settings'))
 const CatchAllRoute = lazy(() => import('./containers/CatchAllRoute'))
 const OneClickApps = lazy(
-	() => import('./containers/apps/oneclick/selector/OneClickAppSelector'),
+	() => import('./containers/apps/oneclick/selector/OneClickAppSelector')
 )
 const OneClickConfig = lazy(
-	() => import('./containers/apps/oneclick/variables/OneClickAppConfigPage'),
+	() => import('./containers/apps/oneclick/variables/OneClickAppConfigPage')
 )
-
 export default function App() {
 	const { status } = useThemeSwitcher()
+	const [ready, setReady] = useState(false)
 
-	if (status === 'loading') return null
+	useEffect(() => {
+		if (status === 'loaded') setReady(true)
+	}, [status])
+
+	if (!ready) return null
 
 	return (
 		<div className="full-screen">

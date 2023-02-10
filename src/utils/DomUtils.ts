@@ -8,7 +8,7 @@ function scrollToFixedFromTop(fromTopPx: number, el: HTMLElement) {
 
 export default {
     scrollToTopBar(delay?: number) {
-        const el = document.getElementById('main-content-layout')
+        const el = document.getElementById('content-element')
         const currScroll = el ? el.scrollTop : 0
         if (currScroll <= 120) return
 

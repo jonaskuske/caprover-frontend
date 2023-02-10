@@ -1,9 +1,11 @@
-import preact from '@preact/preset-vite'
+import react from '@vitejs/plugin-react'
 import { fileURLToPath } from 'url'
 import { defineConfig, loadEnv, normalizePath } from 'vite'
 import fonts from 'vite-plugin-webfont-dl'
 
-const resolve = (p) => normalizePath(fileURLToPath(new URL(p, import.meta.url)))
+function resolve(p: string) {
+    return normalizePath(fileURLToPath(new URL(p, import.meta.url)))
+}
 
 export default defineConfig(({ mode }) => {
     const { PORT } = loadEnv(mode, process.cwd(), 'PORT')
@@ -11,7 +13,7 @@ export default defineConfig(({ mode }) => {
     return {
         // workaround necessary for `deep-equal`
         define: { 'global.BigInt': 'globalThis.BigInt' },
-        plugins: [preact(), fonts()],
+        plugins: [react(), fonts()],
         server: { port: PORT ? Number(PORT) : undefined },
         build: {
             outDir: 'build',

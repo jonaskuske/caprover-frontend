@@ -1,30 +1,31 @@
 import { BulbFilled, BulbOutlined } from '@ant-design/icons'
-import { Switch } from 'antd'
-import React, { useEffect, useState } from 'react'
+import { Switch, SwitchProps } from 'antd'
+import { useState } from 'react'
 import { useThemeSwitcher } from 'react-css-theme-switcher'
 import StorageHelper from '../../utils/StorageHelper'
 
-const DarkModeSwitch = () => {
+export default function DarkModeSwitch(props: SwitchProps) {
     const { switcher, themes } = useThemeSwitcher()
-    const [checked, setChecked] = useState(false)
+    const [checked, setChecked] = useState(
+        () => StorageHelper.getThemeFromLocalStorage() === 'dark',
+    )
 
-    useEffect(() => {
-        const storedCheckedState = StorageHelper.getDarkModeFromLocalStorage()
-        setChecked(storedCheckedState)
-    }, [])
+    const onSwitchChange = (checked: boolean) => {
+        StorageHelper.setDarkModeInLocalStorage(checked)
+        setChecked(checked)
+        switcher({ theme: checked ? themes.dark : themes.light })
+    }
 
     return (
         <Switch
             checkedChildren={<BulbOutlined />}
             unCheckedChildren={<BulbFilled />}
             checked={checked}
-            onChange={(checked) => {
-                StorageHelper.setDarkModeInLocalStorage(checked)
-                switcher({ theme: checked ? themes.dark : themes.light })
-                setChecked(checked)
+            onChange={onSwitchChange}
+            style={{
+                backgroundColor: checked ? 'rgb(27, 138, 211, 0.6)' : undefined,
             }}
+            {...props}
         />
     )
 }
-
-export default DarkModeSwitch

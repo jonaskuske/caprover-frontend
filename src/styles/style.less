@@ -2,6 +2,7 @@ html,
 body,
 #root {
     height: 100%;
+    overflow-x: hidden;
 }
 
 body {
@@ -9,6 +10,20 @@ body {
     padding: 0;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+}
+
+#content-element {
+    overflow: auto;
+    flex-shrink: 0;
+    flex-basis: 100%;
+    padding-top: 12px;
+    padding-bottom: 36px;
+}
+
+@media screen and (min-width: 768px) {
+    #content-element {
+        flex-basis: auto;
+    }
 }
 
 code {
@@ -21,10 +36,6 @@ code {
     padding-bottom: 2px;
     color: #c7254e;
     border-radius: 4px;
-}
-
-#main-content-layout {
-    overflow-x: hidden;
 }
 
 .full-screen {
@@ -132,4 +143,8 @@ body {
     &-checked::after {
         border-radius: 3px;
     }
+}
+
+.ant-input {
+    border-radius: 0;
 }

@@ -1,22 +1,25 @@
 import { message } from 'antd'
 
+export type CaptainError = { captainStatus?: string; captainMessage?: string }
+
 export default class Toaster {
-    static toast(error: any) {
-        let errorMessage = 'Something bad happened.'
-        if (error.captainStatus) {
-            let errorDescription = error.captainMessage || errorMessage
-            errorMessage = `${error.captainStatus} : ${errorDescription}`
+    static toast(error: string | CaptainError) {
+        let msg = 'Something bad happened.'
+
+        if (typeof error === 'string') msg = error
+        else if (error) {
+            msg = error.captainMessage ?? msg
+            if (error.captainStatus) msg = `${error.captainStatus} : ${msg}`
         }
-        message.error(errorMessage)
+
+        message.error(msg)
         if (!!import.meta.env.VITE_IS_DEBUG) console.error(error)
     }
 
-    static createCatcher(functionToRun?: Function) {
-        return function (error: any) {
+    static createCatcher(callback?: Function) {
+        return function (error: CaptainError) {
             Toaster.toast(error)
-            if (functionToRun) {
-                functionToRun()
-            }
+            if (callback) callback(error)
         }
     }
 }

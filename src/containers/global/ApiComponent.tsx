@@ -26,7 +26,7 @@ export default class ApiComponent<P = {}, S = {}> extends Component<P, S> {
 		this.apiManager.destroy()
 	}
 
-	render() {
+	render(): React.ReactNode {
 		return null
 	}
 }
