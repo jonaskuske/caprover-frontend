@@ -76,7 +76,10 @@ export default function PageRoot() {
 					style={{ zIndex: 2 }}
 					onCollapse={onCollapse}
 				>
-					<PageMenu showUpdate={versionInfo?.canUpdate && !isMobile} />
+					<PageMenu
+						onClick={() => onCollapse(true, 'responsive')}
+						showUpdate={versionInfo?.canUpdate && !isMobile}
+					/>
 				</Layout.Sider>
 
 				<Layout.Content id="content-element" ref={contentElement} key={rootKey}>

@@ -55,22 +55,23 @@ const MENU_ITEM_UPDATE = {
 
 type Props = MenuProps & { showUpdate?: boolean }
 
-export function PageMenu({ showUpdate, ...props }: Props) {
+export function PageMenu({ showUpdate, onClick, ...props }: Props) {
 	const location = useLocation()
 	const navigate = useNavigate()
 	const apiManager = useApiManager()
-	const isMobile = useSelector((s) => s.globalReducer.isMobile)
+	const isMobile = useSelector((state: any) => state.globalReducer.isMobile)
 
 	const menuItems: ItemType[] = [...MENU_ITEMS]
 
 	if (isMobile) {
 		menuItems.push(...MENU_ITEMS_MOBILE)
-	}
-	if (showUpdate) {
+	} else if (showUpdate) {
 		menuItems.push(MENU_ITEM_UPDATE)
 	}
 
-	function handleMenuClick({ key }: MenuInfo) {
+	function handleMenuClick(info: MenuInfo) {
+		const { key } = info
+
 		if (key === '@logout') {
 			apiManager.setAuthToken('')
 			navigate('/login', { replace: true, state: { from: location } })
@@ -79,6 +80,8 @@ export function PageMenu({ showUpdate, ...props }: Props) {
 		} else {
 			window.open(key, '_blank', 'noopener,noreferrer')
 		}
+
+		onClick?.(info)
 	}
 
 	return (
