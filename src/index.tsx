@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { ThemeSwitcherProvider } from 'react-css-theme-switcher'
 import ReactDOM from 'react-dom'
 import { Provider } from 'react-redux'
@@ -26,23 +26,35 @@ const light = import.meta.env.DEV
 	? new URL(`./styles/light-theme.less?direct`, import.meta.url).href
 	: `${import.meta.env.BASE_URL}assets/light-theme.css`
 
-const themeMap = { dark, light }
+ReactDOM.render(<Root />, document.getElementById('root')!)
 
-const defaultTheme = StorageHelper.getThemeFromLocalStorage()
+function Root() {
+	const [theme, setTheme] = useState(() =>
+		StorageHelper.getThemeFromLocalStorage()
+	)
 
-ReactDOM.render(
-	<React.Suspense fallback={null}>
-		<ThemeSwitcherProvider
-			themeMap={themeMap}
-			defaultTheme={defaultTheme}
-			insertionPoint="styles-insertion-point"
-		>
-			<Provider store={store}>
-				<HashRouter>
-					<App />
-				</HashRouter>
-			</Provider>
-		</ThemeSwitcherProvider>
-	</React.Suspense>,
-	document.getElementById('root')!,
-)
+	useEffect(() => {
+		const query = window.matchMedia('(prefers-color-scheme: dark)')
+		const listener = () => setTheme(StorageHelper.getThemeFromLocalStorage())
+
+		query.addEventListener('change', listener)
+
+		return () => query.removeEventListener('change', listener)
+	}, [])
+
+	return (
+		<React.Suspense fallback={null}>
+			<ThemeSwitcherProvider
+				themeMap={{ dark, light }}
+				defaultTheme={theme}
+				insertionPoint="styles-insertion-point"
+			>
+				<Provider store={store}>
+					<HashRouter>
+						<App />
+					</HashRouter>
+				</Provider>
+			</ThemeSwitcherProvider>
+		</React.Suspense>
+	)
+}
