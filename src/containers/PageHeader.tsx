@@ -1,5 +1,6 @@
 import * as icon from '@ant-design/icons'
 import { Button, ButtonProps, Layout, Space } from 'antd'
+import { MouseEventHandler } from 'react'
 import { useSelector } from 'react-redux'
 import { useLocation } from 'react-router'
 import { useLinkClickHandler } from 'react-router-dom'
@@ -12,9 +13,9 @@ type Props = { showUpdate?: boolean; toggle(): void }
 export function PageHeader(props: Props) {
 	const apiManager = useApiManager()
 	const location = useLocation()
-	const isMobile = useSelector((s) => s.globalReducer.isMobile)
-	const goToSettings = useLinkClickHandler('/settings#updates')
-	const goToLogin = useLinkClickHandler('/login', {
+	const isMobile = useSelector((state: any) => state.globalReducer.isMobile)
+	const goToSettings = useLinkClickHandler<HTMLElement>('/settings#updates')
+	const goToLogin = useLinkClickHandler<HTMLElement>('/login', {
 		replace: true,
 		state: { from: location },
 	})
@@ -50,7 +51,7 @@ export function PageHeader(props: Props) {
 						type="link"
 						icon={<icon.LogoutOutlined />}
 						href="/login"
-						onClick={(evt: MouseEvent) => {
+						onClick={(evt) => {
 							apiManager.setAuthToken('')
 							goToLogin(evt)
 						}}
@@ -87,7 +88,7 @@ function Logo(props: JSX.IntrinsicElements['img']) {
 }
 
 type UpdateProps = Omit<ButtonProps, 'onClick'> & {
-	onClick(e: MouseEvent): void
+	onClick: MouseEventHandler<HTMLElement>
 }
 
 function Update(props: UpdateProps) {
@@ -98,7 +99,7 @@ function Update(props: UpdateProps) {
 			icon={<icon.ExclamationCircleFilled />}
 			size="large"
 			shape="round"
-			type="danger"
+			danger
 			href="/settings"
 			{...props}
 		>
